@@ -1,0 +1,14 @@
+yt-dlp
+pandas
+numpy
+opencv-python
+scenedetect[opencv]
+easyocr
+matplotlib
+seaborn
+scipy
+scikit-learn
+jupyter
+ipykernel
+tqdm
+Pillow
