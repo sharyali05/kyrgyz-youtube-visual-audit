@@ -70,7 +70,7 @@ def extract_frames(url: str, output_dir: Path, fps: float = 0.5, max_duration: i
         "yt-dlp",
         "--quiet",
         "--no-warnings",
-        "-f", "best[height<=480]",  # cap at 480p to reduce bandwidth
+        "-f", "b",                  # best pre-merged format (suppresses yt-dlp warning)
         "-o", "-",                   # stream to stdout
         url
     ]
