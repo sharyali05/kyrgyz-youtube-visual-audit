@@ -92,8 +92,6 @@ kyrgyz-youtube-visual-audit/
 │   ├── processed/
 │   │   ├── visual_features.csv              # Color/luminance features per video
 │   │   └── visual_features_with_text.csv    # + text overlay features
-│   └── samples/
-│       └── README.md
 │
 ├── notebooks/
 │   ├── 00_data_exploration.ipynb            # EDA on the labeled URL dataset
