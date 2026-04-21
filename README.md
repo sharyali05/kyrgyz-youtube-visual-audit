@@ -114,8 +114,8 @@ kyrgyz-youtube-visual-audit/
 │   │   ├── fig6_luminance_vs_saturation
 │   │   ├── fig7_thumbnail_grid
 │   │   └── fig8_text_overlay
-        ├── fig9_umap_embedding             ← new
-        └── fig10_umap_luminance            ← new
+        ├── fig9_umap_embedding             
+        └── fig10_umap_luminance            
 │   └── tables/                              # Summary statistics and test results
 │       ├── descriptive_stats.csv
 │       ├── kruskal_wallis.csv
