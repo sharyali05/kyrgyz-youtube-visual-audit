@@ -1,0 +1,8 @@
+,mean_saturation,mean_luminance,saturation_std,luminance_std,red_ratio,blue_ratio,yellow_ratio
+mean_saturation,1.0,0.202,0.4,-0.074,0.228,0.143,0.316
+mean_luminance,0.202,1.0,0.133,-0.185,0.034,-0.034,0.231
+saturation_std,0.4,0.133,1.0,0.298,0.091,0.109,0.272
+luminance_std,-0.074,-0.185,0.298,1.0,0.056,-0.012,0.038
+red_ratio,0.228,0.034,0.091,0.056,1.0,-0.328,0.132
+blue_ratio,0.143,-0.034,0.109,-0.012,-0.328,1.0,-0.237
+yellow_ratio,0.316,0.231,0.272,0.038,0.132,-0.237,1.0

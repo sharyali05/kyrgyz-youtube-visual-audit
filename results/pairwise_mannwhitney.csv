@@ -1,0 +1,22 @@
+feature,label,group_a,group_b,median_a,median_b,direction,U_statistic,p_value,p_bonferroni,effect_size_r,significant
+blue_ratio,Blue Pixel Ratio,russian,kyrgyz,0.065,0.132,kyrgyz > russian,13512.0,0.00831,0.174517,0.1611,No
+blue_ratio,Blue Pixel Ratio,kyrgyz,english,0.132,0.086,kyrgyz > english,17426.0,0.081709,1.715897,0.1069,No
+blue_ratio,Blue Pixel Ratio,russian,english,0.065,0.086,english > russian,14585.0,0.443638,9.316395,0.0474,No
+luminance_std,Luminance Variability,kyrgyz,english,69.846,66.778,kyrgyz > english,17904.0,0.025389,0.533171,0.1373,No
+luminance_std,Luminance Variability,russian,kyrgyz,66.882,69.846,kyrgyz > russian,14353.0,0.074472,1.563907,0.1089,No
+luminance_std,Luminance Variability,russian,english,66.882,66.778,russian > english,15865.0,0.558293,11.724151,0.0362,No
+mean_luminance,Mean Luminance (Brightness),russian,kyrgyz,156.683,127.287,russian > kyrgyz,21915.0,0.0,0.0,0.3606,Yes
+mean_luminance,Mean Luminance (Brightness),kyrgyz,english,127.287,166.477,english > kyrgyz,8646.0,0.0,0.0,0.4508,Yes
+mean_luminance,Mean Luminance (Brightness),russian,english,156.683,166.477,english > russian,13953.0,0.151612,3.183847,0.0887,No
+mean_saturation,Mean Color Saturation,kyrgyz,english,89.999,114.975,english > kyrgyz,11461.0,9e-06,0.000198,0.272,Yes
+mean_saturation,Mean Color Saturation,russian,kyrgyz,110.257,89.999,russian > kyrgyz,19088.0,0.002431,0.051044,0.1851,No
+mean_saturation,Mean Color Saturation,russian,english,110.257,114.975,english > russian,14007.0,0.168573,3.540037,0.0851,No
+red_ratio,Red/Orange Pixel Ratio,russian,kyrgyz,0.242,0.19,russian > kyrgyz,18768.5,0.006793,0.142648,0.1652,No
+red_ratio,Red/Orange Pixel Ratio,kyrgyz,english,0.19,0.221,english > kyrgyz,14271.5,0.128005,2.6881,0.0935,No
+red_ratio,Red/Orange Pixel Ratio,russian,english,0.242,0.221,russian > english,16331.0,0.281135,5.903831,0.0667,No
+saturation_std,Saturation Variability,kyrgyz,english,64.81,71.961,english > kyrgyz,13292.0,0.011229,0.235811,0.1557,No
+saturation_std,Saturation Variability,russian,kyrgyz,67.613,64.81,russian > kyrgyz,17469.0,0.166067,3.487411,0.0846,No
+saturation_std,Saturation Variability,russian,english,67.613,71.961,english > russian,14134.0,0.214012,4.494246,0.0768,No
+yellow_ratio,Yellow Pixel Ratio,kyrgyz,english,0.022,0.032,english > kyrgyz,13541.5,0.022764,0.478036,0.1398,No
+yellow_ratio,Yellow Pixel Ratio,russian,kyrgyz,0.027,0.022,russian > kyrgyz,17315.0,0.219331,4.605951,0.075,No
+yellow_ratio,Yellow Pixel Ratio,russian,english,0.027,0.032,english > russian,14330.5,0.300676,6.314205,0.064,No

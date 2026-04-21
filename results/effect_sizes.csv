@@ -1,0 +1,8 @@
+feature,label,group_a,group_b,median_a,median_b,direction,U_statistic,p_value,p_bonferroni,effect_size_r,significant,effect_interpretation
+mean_luminance,Mean Luminance (Brightness),russian,kyrgyz,156.683,127.287,russian > kyrgyz,21915.0,0.0,0.0,0.3606,Yes,medium
+mean_saturation,Mean Color Saturation,russian,kyrgyz,110.257,89.999,russian > kyrgyz,19088.0,0.002431,0.051044,0.1851,No,small
+red_ratio,Red/Orange Pixel Ratio,russian,kyrgyz,0.242,0.19,russian > kyrgyz,18768.5,0.006793,0.142648,0.1652,No,small
+blue_ratio,Blue Pixel Ratio,russian,kyrgyz,0.065,0.132,kyrgyz > russian,13512.0,0.00831,0.174517,0.1611,No,small
+luminance_std,Luminance Variability,russian,kyrgyz,66.882,69.846,kyrgyz > russian,14353.0,0.074472,1.563907,0.1089,No,small
+saturation_std,Saturation Variability,russian,kyrgyz,67.613,64.81,russian > kyrgyz,17469.0,0.166067,3.487411,0.0846,No,negligible
+yellow_ratio,Yellow Pixel Ratio,russian,kyrgyz,0.027,0.022,russian > kyrgyz,17315.0,0.219331,4.605951,0.075,No,negligible

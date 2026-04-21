@@ -1,0 +1,8 @@
+feature,label,H_statistic,p_value,significant
+mean_luminance,Mean Luminance (Brightness),60.9456,0.0,Yes
+mean_saturation,Mean Color Saturation,20.5705,3.4e-05,Yes
+red_ratio,Red/Orange Pixel Ratio,7.2631,0.026475,Yes
+blue_ratio,Blue Pixel Ratio,7.116,0.028496,Yes
+saturation_std,Saturation Variability,6.6078,0.036739,Yes
+luminance_std,Luminance Variability,5.7118,0.057504,No
+yellow_ratio,Yellow Pixel Ratio,5.1916,0.074586,No
