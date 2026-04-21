@@ -98,6 +98,7 @@ kyrgyz-youtube-visual-audit/
 │   ├── colab_thumbnail_analysis.ipynb       # Thumbnail fetching + feature extraction (Colab)
 │   ├── 03_statistical_analysis.ipynb        # Group comparisons across language groups
 │   └── 04_visualization.ipynb              # Publication-ready figures
+|   └── 05_cnn_embedding.ipynb               # CNN embeddings + UMAP/t-SNE
 │
 ├── scripts/
 │   ├── 01_extract_frames.py                 # Optional: full video frame extraction
@@ -113,6 +114,8 @@ kyrgyz-youtube-visual-audit/
 │   │   ├── fig6_luminance_vs_saturation
 │   │   ├── fig7_thumbnail_grid
 │   │   └── fig8_text_overlay
+        ├── fig9_umap_embedding             ← new
+        └── fig10_umap_luminance            ← new
 │   └── tables/                              # Summary statistics and test results
 │       ├── descriptive_stats.csv
 │       ├── kruskal_wallis.csv
