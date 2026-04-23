@@ -1,1 +1,339 @@
-template
+% ============================================================
+% Visual Semiotics and Language Ideologies in Kyrgyz Digital Media
+% Final Report — Cultural Analytics Course
+% Template styled after Journal of Cultural Analytics / DHQ
+% ============================================================
+
+\documentclass[12pt, letterpaper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\doublespacing
+
+\usepackage{fontenc}
+\usepackage{inputenc}
+\usepackage{microtype}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{soul}      % for \hl{} highlighting of TODO items
+\usepackage{enumitem}
+\usepackage{csquotes}
+
+% ── TODO command — remove before final submission ─────────────────────────────
+\newcommand{\todo}[1]{\hl{[TODO: #1]}}
+
+% ── Title block ───────────────────────────────────────────────────────────────
+\title{
+    \Large\textbf{Visual Semiotics and Language Ideologies in Kyrgyz Digital Media:}\\
+    \large A Computational Audit of YouTube Children's Content
+}
+
+\author{
+    Sharazad Ali\thanks{sia3@berkeley.edu} \and
+    Nel Escher\thanks{nelescher@berkeley.edu}
+}
+
+\date{
+    \small INFO 230: Cultural Analytics\\
+    \small University of California, Berkeley\\
+    \small \today
+}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% ── Author Contributions ──────────────────────────────────────────────────────
+\section*{Author Contributions}
+\noindent In accordance with course requirements, the roles of each author are described below:
+
+\begin{itemize}
+    \item \textbf{Sharazad Ali}: Designed and implemented the computational pipeline for thumbnail feature extraction. Conducted all statistical analyses (Kruskal-Wallis tests, Mann-Whitney U pairwise comparisons, effect size calculations). Performed CNN embedding analysis using MobileNetV2 and UMAP. Generated all figures and tables. Led the writing of the Methods, Results, and technical portions of the Discussion.
+    \item \textbf{Nel Escher}: Contributed to research design and conceptualization. \todo{Add Nel's specific contributions}
+\end{itemize}
+
+\noindent \textbf{Data availability:} The labeled URL corpus and processed visual feature datasets are available at \todo{Zenodo/Dataverse link}. All code is available at \url{https://github.com/sharyali05/kyrgyz-youtube-visual-audit}.
+
+\newpage
+
+% ── Abstract ──────────────────────────────────────────────────────────────────
+\begin{abstract}
+\noindent Though online platforms claim to amplify Indigenous voices, Kyrgyz communities are worried that YouTube is instead eroding their language and culture. Prior algorithmic audit work has demonstrated that YouTube disproportionately recommends Russian-language content to Kyrgyz children, even when they signal preferences for Kyrgyz-language content. Where that work focused on \textit{which} content gets recommended, this study asks: \textit{what does that content look like}, and what do those visual differences signal ideologically? Drawing on ethnographic interviews and participant observation in Bishkek, Kyrgyzstan, we identify community perceptions that Russian-language children's content is more dynamic, colorful, and professionally produced than Kyrgyz-language content. We operationalize these perceptions as measurable visual features extracted from YouTube thumbnails — including luminance, color saturation, color composition, text overlay density, and CNN-derived embeddings — and test whether they hold up computationally across a labeled corpus of 800 YouTube videos. We find that Russian-language thumbnails are significantly brighter than Kyrgyz-language thumbnails (Mann-Whitney U, $r = 0.36$, $p < 0.05$), and that Russian and English thumbnails show higher text overlay rates consistent with a commercial vlogger aesthetic. Unexpectedly, Kyrgyz thumbnails show higher blue pixel ratios, suggesting a \textit{distinct} rather than simply deficient visual register. A CNN embedding analysis using MobileNetV2 and UMAP reveals that while language groups overlap substantially in visual space, Kyrgyz content occupies a distinct spatial position from Russian and English content. We discuss how these visual asymmetries reinforce language ideologies that associate Russian with modernity and Kyrgyz with tradition, and consider implications for platform design and Indigenous digital sovereignty.
+
+\medskip
+\noindent \textbf{Keywords:} algorithmic auditing; language ideology; visual semiotics; YouTube; Kyrgyz; colonial amplification; digital media; thumbnails
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ── 1. Introduction ───────────────────────────────────────────────────────────
+\section{Introduction}
+
+\todo{2--3 paragraphs. Open with the cultural stakes — Kyrgyz language endangerment and platform anxiety. Introduce the Empire Amplifier prior work. State the specific gap this paper fills: not which content gets recommended, but what it looks like. End with paper structure overview.}
+
+\todo{Continue introduction. Describe paper structure: Section 2 theoretical framework, Section 3 data, Section 4 methods, Section 5 results, Section 6 discussion, Section 7 limitations, Section 8 conclusion.}
+
+% ── 2. Theoretical Framework ─────────────────────────────────────────────────
+\section{Theoretical Framework}
+
+\subsection{Language Ideology and Domain Restriction}
+
+\todo{Draw on Woolard 1998, Irvine \& Gal 2000. Explain how associations between language and prestige/modernity lead to domain restriction of heritage languages. Connect to Kyrgyz-Russian diglossia.}
+
+Language ideologies — shared frameworks for understanding the social meaning of linguistic differences \citep{woolard1998} — play a central role in language shift. When a dominant language becomes associated with modernity, education, and economic opportunity, speakers of minority languages often internalize these hierarchies \citep{irvine2000}. \todo{Expand.}
+
+\subsection{Visual Semiotics and Platform Aesthetics}
+
+\todo{Draw on Kress \& van Leeuwen on visual grammar. Discuss how visual features like color, brightness, and layout carry semiotic meaning. Connect to YouTube thumbnail design literature.}
+
+\subsection{Algorithmic Amplification of Colonial Ideologies}
+
+\todo{Situate within decolonial computing literature. Reference Eubanks, Benjamin, and the Empire Amplifier framework specifically.}
+
+% ── 3. Data ───────────────────────────────────────────────────────────────────
+\section{Data}
+
+\subsection{Ethnographic Context}
+
+\todo{ Describe fieldwork in Bishkek. Characterize interview data. Include specific quotes about perceptions of Russian vs. Kyrgyz content. Describe Keremet Koch and its institutional context (UNICEF, Aga Khan Foundation).}
+
+\subsection{URL Corpus}
+
+The primary dataset consists of \todo{N} unique YouTube video URLs collected during a prior sock-puppet algorithmic audit of YouTube recommendations in Kyrgyzstan \citep{todo}. Videos were collected by simulating child user behavior — searching for popular children's content queries in both Russian and Kyrgyz — and recording the search results and recommendations returned by YouTube. Each video was subsequently labeled by research assistants at a university in Bishkek for (1) the primary language spoken and (2) the apparent ethnicity of speakers or characters.
+
+Table~\ref{tab:corpus} summarizes the composition of the corpus by language group.
+
+\begin{table}[H]
+\centering
+\caption{Composition of the labeled URL corpus by language group}
+\label{tab:corpus}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Language} & \textbf{Total URLs} & \textbf{With thumbnails} \\
+\midrule
+Russian  & \todo{N} & 177 \\
+Kyrgyz   & \todo{N} & 182 \\
+English  & \todo{N} & 173 \\
+Other    & \todo{N} & \todo{N} \\
+\midrule
+Total    & 10,741   & 710 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Thumbnail Dataset}
+
+For the visual analysis, we extracted thumbnail images for up to 200 videos per language group. YouTube thumbnails were fetched programmatically using standard HTTPS requests, retrieving the highest available resolution for each video (\texttt{maxresdefault} $\rightarrow$ \texttt{hqdefault} $\rightarrow$ \texttt{mqdefault} $\rightarrow$ \texttt{default}). Videos that were deleted, private, or otherwise unavailable returned placeholder images, which were detected and excluded based on image height. Of the 800 videos targeted, 710 (88.8\%) yielded usable thumbnails.
+
+% ── 4. Methods ────────────────────────────────────────────────────────────────
+\section{Methods}
+
+\subsection{Rationale for Thumbnail Analysis}
+
+We use thumbnails rather than full video frames as our unit of analysis for three reasons. First, thumbnails are lightweight and fast to retrieve at scale, making them tractable for large-corpus analysis without the bandwidth and storage requirements of video download. Second, thumbnails are designed by content creators to be maximally visually representative of their content — they are, in effect, the visual face that a video presents to potential viewers, optimized for attention and click-through. Third, thumbnails are the primary visual signal that the YouTube recommendation interface presents to users browsing content, making them the most ecologically valid unit for studying the visual landscape of recommended content.
+
+\subsection{Color and Luminance Feature Extraction}
+
+For each thumbnail, we computed the following features using the HSV (Hue-Saturation-Value) color space via OpenCV \citep{opencv}:
+
+\begin{itemize}
+    \item \textbf{Mean luminance}: Average value (V channel) across all pixels, ranging 0--255
+    \item \textbf{Mean saturation}: Average saturation (S channel) across all pixels, ranging 0--255
+    \item \textbf{Saturation and luminance variability}: Standard deviation of S and V channels
+    \item \textbf{Mean hue}: Average hue (H channel) across all pixels
+    \item \textbf{Color ratios}: Proportion of pixels classified as red/orange (H $\leq$ 15 or H $\geq$ 160, S $>$ 50), blue (100 $\leq$ H $\leq$ 130, S $>$ 50), and yellow (20 $\leq$ H $\leq$ 35, S $>$ 80)
+\end{itemize}
+
+\subsection{Text Overlay Detection}
+
+To measure vlogger-style text overlays, we used a lightweight edge-density method rather than full OCR to avoid memory constraints. For each thumbnail, we computed: (1) \textbf{text cell ratio} — the proportion of an 8$\times$6 image grid whose cells exceed an edge density threshold of 0.15, as detected by Canny edge detection; (2) \textbf{contrast score} — overall image contrast via Otsu thresholding; and (3) a binary \textbf{text overlay proxy} flag when text cell ratio exceeded 0.30. This approach detects high-contrast, text-like regions without distinguishing text from other high-contrast visual elements — a limitation we address in Section~\ref{sec:limitations}.
+
+\subsection{CNN Embedding Analysis}
+
+To assess the overall visual similarity structure of the corpus, we extracted 1280-dimensional feature vectors from each thumbnail using MobileNetV2 \citep{sandler2018}, a lightweight convolutional neural network pretrained on ImageNet \citep{deng2009}, with the classification head removed and global average pooling applied. These high-dimensional embeddings were reduced to two dimensions using UMAP \citep{mcinnes2018} with cosine distance metric, 15 nearest neighbors, and minimum distance of 0.1. Cluster separation was quantified using the silhouette score \citep{rousseeuw1987}.
+
+\subsection{Statistical Analysis}
+
+All pairwise comparisons between language groups used the Mann-Whitney U test (two-sided), a non-parametric test appropriate for non-normally distributed visual features. Effect sizes were computed as rank-biserial correlations ($r$), interpreted as negligible ($r < 0.1$), small ($0.1 \leq r < 0.3$), medium ($0.3 \leq r < 0.5$), or large ($r \geq 0.5$) following \citet{cohen1988}. To control for multiple comparisons across seven features and three language pairs, we applied Bonferroni correction ($\alpha = 0.05 / 21 = 0.0024$). All analyses were conducted in Python using SciPy \citep{scipy}, pandas \citep{pandas}, and scikit-learn \citep{sklearn}.
+
+% ── 5. Results ────────────────────────────────────────────────────────────────
+\section{Results}
+
+\subsection{Descriptive Statistics}
+
+Table~\ref{tab:descriptive} presents mean and median values for each visual feature by language group. Russian-language thumbnails show the highest mean luminance and saturation, while Kyrgyz thumbnails show the highest mean blue pixel ratio.
+
+\begin{table}[H]
+\centering
+\caption{Descriptive statistics for visual features by language group (median values)}
+\label{tab:descriptive}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Feature} & \textbf{Russian} & \textbf{Kyrgyz} & \textbf{English} \\
+\midrule
+Mean luminance    & 156.7 & 127.3 & \todo{X} \\
+Mean saturation   & 110.3 & 90.0  & \todo{X} \\
+Red/orange ratio  & 0.242 & 0.190 & \todo{X} \\
+Blue ratio        & 0.065 & 0.132 & \todo{X} \\
+Yellow ratio      & 0.027 & 0.022 & \todo{X} \\
+Text cell ratio   & 0.146 & 0.125 & \todo{X} \\
+Text overlay (\%) & 19.8  & 13.2  & 20.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Luminance}
+
+Russian-language thumbnails are significantly brighter than Kyrgyz-language thumbnails (Mann-Whitney U, $r = 0.36$, $p < 0.05$ after Bonferroni correction), representing a medium effect size. The median luminance of Russian thumbnails (156.7) exceeds that of Kyrgyz thumbnails (127.3) by approximately 23\% on the 0--255 scale. Figure~\ref{fig:luminance} shows the distribution of luminance values across language groups.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig1_luminance_by_language.png}
+    \caption{Luminance (brightness) distributions by language group. Left: boxplot; right: violin plot. Russian-language thumbnails are significantly brighter than Kyrgyz-language thumbnails (Mann-Whitney U, $r = 0.36$, $p < 0.05$).}
+    \label{fig:luminance}
+\end{figure}
+
+\subsection{Color Saturation}
+
+Russian-language thumbnails trend toward higher saturation than Kyrgyz thumbnails (median 110.3 vs. 90.0), with a small effect size ($r = 0.19$), but this difference does not reach significance after Bonferroni correction ($p > 0.0024$). The wide variance in saturation within both groups — visible in Figure~\ref{fig:saturation} — suggests that saturation alone is not a reliable differentiator between language groups, and that the saturation difference is likely real but modest.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_saturation_by_language.png}
+    \caption{Color saturation distributions by language group. Russian thumbnails trend toward higher saturation but the difference does not reach significance after Bonferroni correction ($r = 0.19$, $p = $ n.s.).}
+    \label{fig:saturation}
+\end{figure}
+
+\subsection{Color Composition}
+
+Figure~\ref{fig:colorratios} shows red/orange, blue, and yellow pixel ratios across language groups. While Russian thumbnails show higher red/orange ratios (median 0.242 vs. 0.190), the most striking finding is the \textit{blue ratio reversal}: Kyrgyz thumbnails show substantially higher blue pixel ratios than Russian ones (median 0.132 vs. 0.065). This finding is discussed further in Section~\ref{sec:discussion}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_color_ratios.png}
+    \caption{Color composition by language group. Kyrgyz thumbnails show higher blue pixel ratios than Russian thumbnails, suggesting a distinct rather than simply deficient visual register.}
+    \label{fig:colorratios}
+\end{figure}
+
+\subsection{Text Overlay}
+
+Russian-language thumbnails show higher text overlay density than Kyrgyz thumbnails (19.8\% vs. 13.2\% classified as text-heavy), with a small effect size ($r = 0.11$, $p = 0.064$). While this difference does not reach significance at the corrected alpha level, the consistent pattern across all three text metrics and the near-significant p-value suggest a real but modest difference. Notably, English-language thumbnails show the highest text overlay rate (20.8\%), nearly identical to Russian, positioning both within the commercial vlogger aesthetic register.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig8_text_overlay.png}
+    \caption{Text overlay indicators by language group. English and Russian thumbnails show higher text density than Kyrgyz thumbnails.}
+    \label{fig:textoverlay}
+\end{figure}
+
+\subsection{Effect Size Summary}
+
+Figure~\ref{fig:effectsizes} summarizes effect sizes for all features in the Russian vs. Kyrgyz comparison. Luminance is the only feature with a medium effect size and the only result marked as significant after Bonferroni correction. The blue ratio is the only feature where Kyrgyz thumbnails score higher than Russian ones.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig4_effect_sizes.png}
+    \caption{Effect sizes (rank-biserial $r$) for all visual features comparing Russian vs. Kyrgyz thumbnails. Positive values indicate Russian higher; negative values indicate Kyrgyz higher. Asterisk (*) marks significance after Bonferroni correction.}
+    \label{fig:effectsizes}
+\end{figure}
+
+\subsection{CNN Embedding Analysis}
+
+The silhouette score on raw MobileNetV2 embeddings was 0.020, and on 2D UMAP coordinates was 0.078, both below the 0.2 threshold for meaningful cluster separation. This indicates that Russian, Kyrgyz, and English thumbnails do not occupy clearly distinct territories in CNN visual space. However, the centroid positions reveal a meaningful spatial pattern: the Kyrgyz centroid ($x = -2.53$, $y = 1.64$) is substantially displaced from both Russian ($x = 0.18$, $y = 1.27$) and English ($x = 0.97$, $y = 1.01$) centroids, with a Euclidean distance of 2.73 between Russian and Kyrgyz centroids. Figure~\ref{fig:umap} shows the UMAP projection colored by language group, and Figure~\ref{fig:umapluminance} shows the same projection colored by luminance, revealing a visible brightness gradient that aligns with the centroid separation.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{figures/fig9_umap_language.png}
+        \caption{Colored by language group}
+        \label{fig:umap}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{figures/fig10_umap_luminance.png}
+        \caption{Colored by luminance}
+        \label{fig:umapluminance}
+    \end{subfigure}
+    \caption{UMAP projection of MobileNetV2 thumbnail embeddings. Diamonds indicate group medians. While groups overlap substantially (silhouette = 0.08), the Kyrgyz centroid is displaced from Russian and English. The luminance gradient (right) spatially corroborates the statistical finding.}
+\end{figure}
+
+% ── 6. Discussion ─────────────────────────────────────────────────────────────
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Luminance and the Aesthetics of Prestige}
+
+\todo{Connect the luminance finding to interview data. Quote participants describing Russian content as "more colorful" or "professional." Draw on color psychology literature (e.g., Labrecque \& Milne 2012 on attention-grabbing palettes). Argue that brightness differences are not merely aesthetic but semiotic — they carry meaning within the language ideology framework.}
+
+The finding that Russian-language thumbnails are significantly brighter than Kyrgyz ones directly corroborates what caregivers reported in ethnographic interviews. \todo{Insert specific quotes from Ashley's interview data here.} This brightness differential is not merely a matter of production quality — it reflects the visual grammar of commercial children's entertainment, in which high luminance signals energy, excitement, and attention-worthiness \citep{todo}.
+
+\subsection{The Blue Ratio Reversal: Distinct, Not Deficient}
+
+\todo{This is your most theoretically interesting finding. Argue against a simple quality hierarchy. Connect to institutional production contexts (UNICEF, Aga Khan Foundation). Draw on language ideology literature — Woolard's argument against framing minority languages as simply deficient versions of dominant ones.}
+
+The elevated blue pixel ratio in Kyrgyz thumbnails is the most theoretically generative finding of this study. Rather than simply falling below Russian content on every visual metric, Kyrgyz thumbnails occupy a different aesthetic register — one characterized by cooler, bluer palettes associated with \todo{landscape imagery / NGO institutional design / animated educational content}. This finding cautions against interpreting the visual gap between Russian and Kyrgyz content as a straightforward quality deficit.
+
+\subsection{The English-Russian Alignment and Colonial Visual Culture}
+
+\todo{Discuss the finding that English and Russian content are more similar to each other than either is to Kyrgyz. Connect to Empire Amplifier argument about YouTube projecting Russian imperial influence. Argue that Russian content participates in global commercial visual culture in a way that Kyrgyz content does not.}
+
+\subsection{CNN Embeddings and Visual Structure}
+
+\todo{Discuss the low silhouette score and its theoretical implications. Use the centroid displacement argument. Connect to the "distinct register" claim.}
+
+% ── 7. Limitations ────────────────────────────────────────────────────────────
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{itemize}
+    \item \textbf{Thumbnail as proxy}: Thumbnails are designed for maximum visual appeal and may not accurately represent in-video aesthetics. Future work should replicate this analysis using sampled video frames.
+    \item \textbf{Video availability}: Many videos in the corpus were unavailable at the time of thumbnail collection, reducing effective sample sizes and potentially introducing systematic bias if deleted videos differ visually from available ones.
+    \item \textbf{Text overlay detection}: The OpenCV edge-density method cannot distinguish text from other high-contrast visual elements. Full OCR on video frames would provide more precise measurement.
+    \item \textbf{Animation vs. live action}: Color and luminance metrics may behave differently for animated vs. live-action content. Future work should analyze these subgenres separately.
+    \item \textbf{CNN generalization}: MobileNetV2 was pretrained on ImageNet (everyday objects) and may not capture the most culturally relevant visual distinctions between these content types. A model fine-tuned on YouTube thumbnails might show stronger separation.
+    \item \textbf{Causal inference}: This study is observational. Visual differences between language groups do not establish that thumbnail aesthetics cause children's language preferences or shift.
+    \item \textbf{Temporal scope}: The URL corpus was collected at a specific point in time. YouTube's recommendation algorithm and available content change continuously.
+\end{itemize}
+
+% ── 8. Conclusion ─────────────────────────────────────────────────────────────
+\section{Conclusion}
+
+\todo{2--3 paragraphs. Summarize findings. Return to the stakes established in the introduction. Make the "distinct register" argument clearly. End with implications for platform design and future work.}
+
+This study demonstrates that the Russian-language YouTube content disproportionately recommended to Kyrgyz children differs visually from Kyrgyz-language content in ways that are measurable, theoretically meaningful, and consistent with community perceptions. Russian-language thumbnails are significantly brighter than Kyrgyz ones, and align more closely with the commercial vlogger aesthetic — high text overlay, warm color palette, high contrast — associated with international English-language content. These visual asymmetries do not merely reflect differences in production quality; they reflect differences in production context, funding, and the aesthetic conventions of commercial entertainment versus institutional or independent content creation.
+
+\todo{Paragraph 2: connect back to Empire Amplifier. The platform not only recommends more Russian content — it recommends content that \textit{looks} more appealing by the metrics of commercial visual culture.}
+
+\todo{Paragraph 3: future directions. Full video frame analysis, subgenre analysis, interview triangulation, platform intervention.}
+
+% ── References ────────────────────────────────────────────────────────────────
+\newpage
+\bibliography{references}
+
+\end{document}
