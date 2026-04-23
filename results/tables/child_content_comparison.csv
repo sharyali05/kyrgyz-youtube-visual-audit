@@ -1,0 +1,5 @@
+feature,label,russian_median,kyrgyz_median,direction,effect_size_r,p_value,significant
+mean_luminance,Mean Luminance,171.191,106.762,russian > kyrgyz,0.549,0.000209,Yes
+mean_saturation,Mean Saturation,123.683,107.997,russian > kyrgyz,0.1871,0.207851,No
+blue_ratio,Blue Pixel Ratio,0.054,0.131,kyrgyz > russian,0.0393,0.794725,No
+red_ratio,Red/Orange Pixel Ratio,0.203,0.183,russian > kyrgyz,0.0402,0.790169,No
