@@ -73,7 +73,8 @@ def download_video(url: str) -> Path:
         'quiet': True,
         'no_warnings': True,
         'js_runtimes': {'deno': {}},
-        'remote_components': {'ejs': 'github'}
+        'remote_components': {'ejs': 'github'},
+        'cookiefile': 'youtube-cookies.txt',
     }
 
     with YoutubeDL(ydl_opts) as ydl:
@@ -145,7 +146,7 @@ def process_video(video_path: Path) -> dict:
                 color_percent = np.max(cnt) / hsv.shape[0] * 100
             else:
                 dom_color = "achromatic"
-                dom_color_percent = 0.0
+                color_percent = 0.0
 
             features = {
                 "avg_brightness": float(np.mean(v)),
