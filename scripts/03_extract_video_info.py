@@ -8,8 +8,10 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 from yt_dlp import YoutubeDL
-from dvt_mod.annotate_mod import yield_video
-from dvt_mod.annotate_mod import annotate_shots
+from dvt_mod1.annotate_mod import yield_video
+from dvt_mod1.annotate_mod import annotate_shots
+from dvt_mod1.annotate_mod import load_model
+from dvt_mod1.annotate_mod import predictions_to_scenes
 import matplotlib.pyplot as plt
 import dvt
 import polars as pl
@@ -22,6 +24,7 @@ import json
 DOWNLOAD_DIR = Path("data/videos")
 RESULTS_FILE = Path("data/results.csv")
 PROGRESS_FILE = Path("data/progress.json")
+
 
 
 # ── Progress Tracking ────────────────────────────────────────────────────
@@ -84,7 +87,140 @@ def download_video(url: str) -> Path:
 
 
 # ── Processing ───────────────────────────────────────────────────────────
-def process_video(video_path: Path) -> dict:
+
+def process_video(video_path: Path, model, batch_size=5000, overlap=100) -> dict:
+    """
+    Single decode pass: collect small frames for TransNetV2 (batched)
+    and do color analysis on every 30th frame simultaneously.
+    """
+    import time
+
+    vid_info = {}
+
+    meta = dvt.video_info(video_path)
+    vid_info['meta'] = meta
+
+    # ── Hue bins for color analysis ───────────────────────────────────────
+    hue_text = """cnom,start,end,mid
+red,0.000000,0.015625,0.007812
+orange,0.015625,0.109375,0.062500
+yellow,0.109375,0.203125,0.156250
+green,0.203125,0.453125,0.328125
+cyan,0.453125,0.546875,0.500000
+blue,0.546875,0.765625,0.656250
+violet,0.765625,0.953125,0.859375
+red,0.953125,1.000000,0.976562"""
+
+    hue = pd.read_csv(io.StringIO(hue_text))
+
+    # ── Single decode pass ────────────────────────────────────────────────
+    frame_info = {}
+    batch = []
+    all_sfp = []
+    all_afp = []
+    frame_count = 0
+    batch_num = 0
+    t_start = time.perf_counter()
+
+    total_frames = int(meta.get('frame_count', 0))
+
+    for image, frame, timestamp in yield_video(video_path):
+        # Small frame for TransNetV2
+        batch.append(cv2.resize(image, (48, 27)))
+        frame_count += 1
+
+        # Color analysis every 30th frame
+        if frame % 30 == 0:
+            hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV).astype(np.float64)
+
+            hsv[:, :, 0] = hsv[:, :, 0] / 179.0
+            hsv[:, :, 1] = hsv[:, :, 1] / 255.0
+            hsv[:, :, 2] = hsv[:, :, 2] / 255.0
+
+            h = hsv[:, :, 0]
+            s = hsv[:, :, 1]
+            v = hsv[:, :, 2]
+
+            hsv_flat = hsv.reshape((-1, 3))
+            chroma = s * v
+
+            chromatic = hsv_flat[hsv_flat[:, 1] * hsv_flat[:, 2] > 0.3]
+
+            if len(chromatic) > 0:
+                bins = np.append(0, hue.end.values)
+                cnt, _ = np.histogram(hsv_flat[(hsv_flat[:, 1] * hsv_flat[:, 2] > 0.3), 0], bins=bins)
+                cnt[0] = cnt[0] + cnt[7]
+                cnt = cnt[:7]
+                dom_color = hue.cnom.values[np.argmax(cnt)]
+                color_percent = np.max(cnt) / hsv_flat.shape[0] * 100
+            else:
+                dom_color = "achromatic"
+                color_percent = 0.0
+
+            frame_info[frame] = {
+                "avg_brightness": float(np.mean(v)),
+                "avg_chroma": float(np.mean(chroma)),
+                "brightness_std": float(np.std(v)),
+                "chroma_std": float(np.std(chroma)),
+                "dom_color": dom_color,
+                "dom_color_percent": color_percent,
+            }
+
+        # ── Process TransNetV2 batch when full ────────────────────────────
+        if len(batch) == batch_size:
+            batch_np = np.stack(batch)
+            sfp, afp = model.predict_frames(batch_np)
+
+            if batch_num == 0:
+                all_sfp.append(sfp)
+                all_afp.append(afp)
+            else:
+                all_sfp.append(sfp[overlap:])
+                all_afp.append(afp[overlap:])
+
+            # Keep last `overlap` frames for next batch
+            batch = batch[-overlap:]
+            batch_num += 1
+
+            elapsed = time.perf_counter() - t_start
+            fps_rate = frame_count / elapsed
+            eta = (total_frames - frame_count) / fps_rate / 60 if total_frames > 0 else 0
+            print(f"  Batch {batch_num}: frame {frame_count}/{total_frames} "
+                  f"({frame_count/max(total_frames,1)*100:.1f}%) "
+                  f"| {fps_rate:.0f} fps "
+                  f"| ETA: {eta:.1f} min")
+
+    # ── Process remaining frames ──────────────────────────────────────────
+    if len(batch) > overlap or batch_num == 0:
+        batch_np = np.stack(batch)
+        sfp, afp = model.predict_frames(batch_np)
+
+        if batch_num == 0:
+            all_sfp.append(sfp)
+            all_afp.append(afp)
+        else:
+            all_sfp.append(sfp[overlap:])
+            all_afp.append(afp[overlap:])
+
+    # ── Combine predictions ───────────────────────────────────────────────
+    sfp = np.concatenate(all_sfp)[:frame_count]
+    afp = np.concatenate(all_afp)[:frame_count]
+    scenes = predictions_to_scenes(afp)
+
+    elapsed = time.perf_counter() - t_start
+    print(f"  Done: {elapsed:.1f}s ({elapsed/60:.1f} min)")
+
+    # ── Build scene info ──────────────────────────────────────────────────
+    dt = pl.from_dict({"start": scenes[:, 0], "end": scenes[:, 1]})
+    dt = dt.with_columns((pl.col("start") / meta['fps']).alias("start_time"))
+    dt = dt.with_columns((pl.col("end") / meta['fps']).alias("end_time"))
+
+    vid_info['scenes'] = dt.to_dicts()
+    vid_info['frames'] = frame_info
+
+    return vid_info
+
+def process_video1(video_path: Path, model) -> dict:
     """
     Your heavy processing goes here.
     Returns a dict of features.
@@ -96,7 +232,8 @@ def process_video(video_path: Path) -> dict:
     vid_info['meta'] = meta
         
     # get scene breaks
-    output = annotate_shots(video_path, False)
+    output = annotate_shots(video_path, model, False)
+
     dt = pl.from_dict(output['scenes'])
     dt = dt.with_columns((pl.col("start") / meta['fps']).alias("start_time"))
     dt = dt.with_columns((pl.col("end") / meta['fps']).alias("end_time"))
@@ -201,6 +338,8 @@ def run_pipeline(input_csv: str):
     print(f"Total: {total} | Already done: {skipped} | Remaining: {total - skipped}")
     print("=" * 60)
 
+    model = load_model()  # once
+
     for i, url in enumerate(urls):
         # ── Skip if already processed ──
         if url in completed:
@@ -214,7 +353,7 @@ def run_pipeline(input_csv: str):
 
             # Process
             print(f"  Processing...")
-            features = process_video(video_path)
+            features = process_video(video_path, model)
 
             # Save result
             save_result(url, features)

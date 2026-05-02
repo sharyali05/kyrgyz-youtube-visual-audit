@@ -491,7 +491,25 @@ class _ColorHistograms(nn.Module):
             return functional.relu(self.fc(similarities))
         return similarities
 
-def annotate_shots(vid_filename, visualize=True):
+# ── Load Model ────────────────────────────────────────────────────
+
+def load_model():
+    """Load model once at startup."""
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
+
+    current_dir = Path.cwd()
+    model_path = current_dir.parent / "models" / "dvt_detect_shots.pt"
+
+    model = _TransNetV2()
+    model.load_state_dict(torch.load(model_path, map_location=device))
+    model.eval()
+    model = model.to(device)
+    model.predict_raw = types.MethodType(predict_raw_fixed, model)
+
+    return model
+
+def annotate_shots(vid_filename, model, visualize=True):
     container = av.open(vid_filename)
     # This forces the decoder to stay on CPU
     stream = container.streams.video[0]
@@ -511,22 +529,22 @@ def annotate_shots(vid_filename, visualize=True):
     container.close()
     frames = np.stack(frames)
 
-    current_dir = Path.cwd()
+    # current_dir = Path.cwd()
 
-    model_path = current_dir.parent / "models" / "dvt_detect_shots.pt"
+    # model_path = current_dir.parent / "models" / "dvt_detect_shots.pt"
 
-    print(model_path)
+    # print(model_path)
 
-    model = _TransNetV2()
-    model.load_state_dict(torch.load(model_path))
-    model.eval()
-    model = model.cuda()
+    # model = _TransNetV2()
+    # model.load_state_dict(torch.load(model_path))
+    # model.eval()
+    # model = model.cuda()
 
-    # Patch it
-    model.predict_raw = types.MethodType(predict_raw_fixed, model)
+    # # Patch it
+    # model.predict_raw = types.MethodType(predict_raw_fixed, model)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model.to(device)
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # model = model.to(device)
     
     sfp, afp = model.predict_frames(frames)
     scenes = predictions_to_scenes(afp)
