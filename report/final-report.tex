@@ -80,7 +80,7 @@
 \noindent In accordance with course requirements, the roles of each author are described below:
 
 \begin{itemize}
-    \item \textbf{Nel Escher}: Led the writing of the Introduction, Theoretical Framework, and Data sections. Contributed to research design and conceptualization. \todo{Add any additional contributions from Nel.}
+    \item \textbf{Nel Escher}: Led the writing of the Introduction, Theoretical Framework, and Data sections. Contributed to research design and conceptualization. Conducted video analysis using shot length annotation from the Distant Viewing Lab.
 
     \item \textbf{Sharazad Ali}: Designed and implemented the full computational pipeline for thumbnail feature extraction. Conducted all statistical analyses including Kruskal-Wallis tests, Mann-Whitney U pairwise comparisons with Bonferroni correction, and rank-biserial effect size calculations. Performed demographic subgroup analysis. Conducted CNN embedding analysis using MobileNetV2 and UMAP. Generated all figures and tables. Led the writing of the Methods, Results, Discussion, Limitations, and Conclusion sections.
 \end{itemize}
@@ -91,7 +91,7 @@
 
 % ── Abstract ──────────────────────────────────────────────────────────────────
 \begin{abstract}
-\noindent Though online platforms claim to amplify Indigenous voices, Kyrgyz communities are worried that YouTube is instead eroding their language and culture. Prior algorithmic audit work has demonstrated that YouTube disproportionately recommends Russian-language content to Kyrgyz children, even when they signal preferences for Kyrgyz-language content. Where that work focused on \textit{which} content gets recommended, this study asks: \textit{what does that content look like}, and what do those visual differences signal ideologically? Drawing on ethnographic interviews and participant observation in Bishkek, Kyrgyzstan, we identify community perceptions that Russian-language children's content is more dynamic, colorful, and professionally produced than Kyrgyz-language content. We operationalize these perceptions as measurable visual features extracted from YouTube thumbnails — including luminance, color saturation, color composition, text overlay density, and CNN-derived embeddings — and test whether they hold up computationally across a labeled corpus of 800 YouTube videos (710 with recoverable thumbnails). We find that Russian-language thumbnails are significantly brighter than Kyrgyz-language thumbnails (Mann-Whitney U, $r = 0.36$, $p < 0.001$ after Bonferroni correction), and that Russian and English thumbnails show higher text overlay rates consistent with a commercial vlogger aesthetic (19.8\% and 20.8\% vs. 13.2\%, $r = 0.11$, $p = 0.065$). When restricting analysis to child-targeted content only, the luminance effect strengthens to a large effect size ($r = 0.55$, $p = 0.0002$), and a striking content scarcity finding emerges: only 12.1\% of Kyrgyz-labeled content targets children, compared to 29.4\% of Russian content. Unexpectedly, Kyrgyz thumbnails show higher blue pixel ratios than Russian ones (median 0.132 vs. 0.065), suggesting a \textit{distinct} rather than simply deficient visual register. A CNN embedding analysis using MobileNetV2 and UMAP reveals that while language groups overlap substantially in visual space (silhouette score = 0.078), the Kyrgyz centroid is displaced from Russian and English centroids by a Euclidean distance of 2.73. We discuss how these visual asymmetries reinforce language ideologies that associate Russian with modernity and Kyrgyz with tradition, and consider implications for platform design and Indigenous digital sovereignty.
+\noindent Though online platforms claim to amplify Indigenous voices, Kyrgyz communities are worried that YouTube is instead eroding their language and culture. Prior algorithmic audit work has demonstrated that YouTube disproportionately recommends Russian-language content to Kyrgyz children, even when they signal preferences for Kyrgyz-language content. Where that work focused on \textit{which} content gets recommended, this study asks: \textit{what does that content look like}, and what do those visual differences signal ideologically? Drawing on ethnographic interviews and participant observation in Bishkek, Kyrgyzstan, we identify community perceptions that Russian-language children's content is more dynamic, colorful, and professionally produced than Kyrgyz-language content. We operationalize these perceptions as measurable visual features extracted from YouTube thumbnails — including luminance, color saturation, color composition, text overlay density, and CNN-derived embeddings — and test whether they hold up computationally across a labeled corpus of 800 YouTube videos (710 with recoverable thumbnails). We find that Russian-language thumbnails are significantly brighter than Kyrgyz-language thumbnails (Mann-Whitney U, $r = 0.36$, $p < 0.001$ after Bonferroni correction), and that Russian and English thumbnails show higher text overlay rates consistent with a commercial vlogger aesthetic (19.8\% and 20.8\% vs. 13.2\%, $r = 0.11$, $p = 0.065$). When restricting analysis to child-targeted content only, the luminance effect strengthens to a large effect size ($r = 0.55$, $p = 0.0002$), and a striking content scarcity finding emerges: only 12.1\% of Kyrgyz-labeled content targets children, compared to 29.4\% of Russian content. Unexpectedly, Kyrgyz thumbnails show higher blue pixel ratios than Russian ones (median 0.132 vs. 0.065), suggesting a \textit{distinct} rather than simply deficient visual register. A CNN embedding analysis using MobileNetV2 and UMAP reveals that while language groups overlap substantially in visual space (silhouette score = 0.078), the Kyrgyz centroid is displaced from Russian and English centroids by a Euclidean distance of 2.73. Extending this analysis to the full videos, we find that Russian content has much shorter shots than Kyrgyz content (median 3.58 sec vs 7.73 sec). Our results demonstrate measurable differences between Kyrgyz and Russian children's content that map onto perceptions of Kyrgyz media as ``boring'' and Russian media as ``cool''---Russian media is brighter and more fast-paced. We discuss how these visual asymmetries reinforce language ideologies that associate Russian with modernity and Kyrgyz with tradition, and consider implications for platform design and Indigenous digital sovereignty.
 
 \medskip
 \noindent \textbf{Keywords:} algorithmic auditing; language ideology; visual semiotics; YouTube; Kyrgyz; colonial amplification; digital media; thumbnails
@@ -104,9 +104,16 @@
 % ── 1. Introduction ───────────────────────────────────────────────────────────
 \section{Introduction [Nel]}
 
-\todo{2--3 paragraphs. Open with the cultural stakes — Kyrgyz language endangerment and platform anxiety. Introduce the Empire Amplifier prior work. State the specific gap this paper fills: not which content gets recommended, but what it looks like. End with paper structure overview.}
+In Bishkek, the capital of Kyrgyzstan, caregivers are concerned that their children increasingly prefer to speak Russian rather than Kyrgyz, their heritage language. They worry that their own grandchildren will not be able to speak or understand Kyrgyz, which would represent a major language shift in the space of a few generations. When asked, parents blame YouTube for flooding their children's devices with Russian-language content.
 
-\todo{Describe paper structure: Section 2 theoretical framework, Section 3 data, Section 4 methods, Section 5 results, Section 6 discussion, Section 7 limitations, Section 8 conclusion.}
+This project is an extension of our prior work \citep{escher2026empire, mcdermott2026}, in which we conducted an ethnography-informed algorithmic audit of YouTube recommendations in Kyrgyzstan. Our prior work found that the YouTube platform presents Kyrgyz children with overwhelmingly Russian content, even when they explicitly signal an interest in Kyrgyz-language videos. Kyrgyz children are algorithmically constructed as audiences for Russian content. Even if children attempt to make their Kyrgyz-speaking identity legible to the algorithm, they are rebuffed. 
+
+However, YouTube is not just inundating children with Russian recommendations---it’s actively shaping their preferences. We observe feedback loops: what the platform recommends to children influences their future searches and selections; how children behave on the platform is incorporated into platform recommendations.
+Children in our ethnography expressed views that Kyrgyz videos were boring, lacking action, and static, while Russian videos were cool \citep{mcdermott2026}. Taking up this language ideology shaped their behavior on the platform, leading them to seek out Russian content.
+
+Our current project seeks to understand what underlies these associations that link Russian-language content with coolness and Kyrgyz content with being boring and backwards. We use computational methods to characterize the content itself, comparing the visual features of Russian-language children’s content to Kyrgyz-language children’s content on YouTube. Our methodological contribution is to ground cultural analysis in community knowledge, operationalizing the categories that Kyrgyz children and caregivers use to distinguish between Russian and Kyrgyz content. We aim to identify patterns in these videos that align with how they are perceived by children as either cool or boring. We compute image metrics and shot lengths to describe the video dataset collected in our prior study. We find that Russian-language videos are brighter, more saturated with color, and faster paced than Kyrgyz-language videos. 
+
+Interpreting our prior and current results together reveals the mechanism by which YouTube contributes to language shift among Kyrgyz children. The platform's recommendation algorithm overwhelmingly directs children toward Russian-language content \citep{escher2026empire, mcdermott2026}, which our present study shows to deploy more stimulating visual registers. Children internalize the visual features of Russian-language content as markers of quality and modernity as they repeatedly encounter it. In interviews, Kyrgyz parents referred to their children as ``Little Russians,'' expressing concern that consuming this media was remaking their children's sense of self. Their anxiety points to a dynamic that inverts Benedict Anderson's account of nation-building through media \citep{anderson1983}. For Anderson, national identity was forged when people consumed shared media in a common vernacular, enabling them to imagine a community of fellow readers they would never meet. YouTube enacts a different process: rather than consolidating a national public through shared-language media, the platform's recommendation algorithm imperils a sense of national community by routing children away from ``uninteresting'' Kyrgyz-language content and toward ``cool'' Russian-language content. In the eyes of caregivers, the ``imagined community'' children are being socialized into is not Kyrgyzstan but Russia. Although YouTube is an American platform, its engagement-maximizing logic functions in practice to project Russian soft power into Central Asia: the economic imperatives of platform capitalism converge with the geopolitical interests of an imperial power by propelling the continued dominance of its cultural products in the region. For Kyrgyz children, algorithmic optimization accomplishes cultural imperialism.
 
 % ── 2. Theoretical Framework ─────────────────────────────────────────────────
 \section{Theoretical Framework [Nel]}
@@ -123,18 +130,20 @@ Language ideologies — shared frameworks for understanding the social meaning o
 
 \subsection{Algorithmic Amplification of Colonial Ideologies}
 
-\todo{Situate within decolonial computing literature. Reference Eubanks, Benjamin, and the Empire Amplifier framework specifically.}
+\todo{Situate within decolonial computing literature. Reference Eubanks, Benjamin, and the Empire Amplifier framework specifically. Use Anderson to explain "Little Russians" charge from caregivers.}
 
 % ── 3. Data ───────────────────────────────────────────────────────────────────
 \section{Data [Nel]}
 
 \subsection{Ethnographic Context}
 
-\todo{Describe fieldwork in Bishkek. Characterize interview data. Include specific quotes about perceptions of Russian vs. Kyrgyz content. Describe Keremet Koch and its institutional context (UNICEF, Aga Khan Foundation).}
+In our prior work, we conducted eight months of fieldwork with 15 Kyrgyz families from several neighborhoods in Bishkek \citep{mcdermott2026}. There were 46 children across these families ranging from six months to 16 years old. We collected over 100 hours of audio and video recordings in family homes and schools, conducted 30 interviews with adults, and recorded all observed instances of children's and parents' interactions with media.
+
+We draw upon this work when describing caregiver concerns and perceptions of content. In every interview conducted, caregivers cited YouTube as a major factor contributing to their children's preference for speaking Russian. Interviews and participant observation suggest that Kyrgyz YouTube videos are perceived as lacking ``action'' and being ``static.'' In contrast, Russian-language content is described as having ``beautiful arrangements'' and high production value. Interviews and participant observation suggest Kyrgyz media is often viewed as technically inferior in terms of using bright, saturated colors.
 
 \subsection{URL Corpus}
 
-The primary dataset consists of \todo{N} unique YouTube video URLs collected during a prior sock-puppet algorithmic audit of YouTube recommendations in Kyrgyzstan \citep{todo}. Videos were collected by simulating child user behavior — searching for popular children's content queries in both Russian and Kyrgyz — and recording the search results and recommendations returned by YouTube. Each video was subsequently labeled by research assistants at a university in Bishkek for (1) the primary language spoken, (2) the apparent ethnicity of speakers or characters, and (3) the most-recommended demographic audience (child, mixed, or adult).
+The primary dataset consists of 10,741 unique YouTube video URLs collected during a prior sock-puppet algorithmic audit of YouTube recommendations in Kyrgyzstan \citep{escher2026empire}. Videos were collected by simulating user behavior — searching for popular queries or browsing the platform — and recording the search results and recommendations returned by YouTube. Each video was subsequently labeled by research assistants at a university in Bishkek for (1) the primary language spoken, and (2) the apparent ethnicity of speakers or characters. Based on the frequency which the video appeared in our different experimental conditions (simulating either a child or adult user in Kyrgyzstan), we also record (3) the most-recommended demographic audience (child, mixed, or adult).
 
 Table~\ref{tab:corpus} summarizes the composition of the corpus by language group.
 
@@ -146,12 +155,12 @@ Table~\ref{tab:corpus} summarizes the composition of the corpus by language grou
 \toprule
 \textbf{Language} & \textbf{Total URLs} & \textbf{With thumbnails} \\
 \midrule
-Russian  & \todo{N} & 177 \\
-Kyrgyz   & \todo{N} & 182 \\
-English  & \todo{N} & 173 \\
-Other    & \todo{N} & 178 \\
+Russian  & 4424 & 177 \\
+Kyrgyz   & 1513 & 182 \\
+English  & 1496 & 173 \\
+Other Language    & 1011 & 178 \\
 \midrule
-Total    & \todo{N}   & 710 \\
+Total    & 8444  & 710 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -196,6 +205,10 @@ Each video in the corpus was labeled with a most-recommended demographic categor
 \subsection{Statistical Analysis}
 
 All pairwise comparisons between language groups used the Mann-Whitney U test (two-sided), a non-parametric test appropriate for non-normally distributed visual features. Effect sizes were computed as rank-biserial correlations ($r$), interpreted as negligible ($r < 0.1$), small ($0.1 \leq r < 0.3$), medium ($0.3 \leq r < 0.5$), or large ($r \geq 0.5$) following \citet{cohen1988}. To control for multiple comparisons across seven features and three language pairs (21 total comparisons), we applied Bonferroni correction ($\alpha_{\text{corrected}} = 0.05 / 21 = 0.00238$). All analyses were conducted in Python using SciPy \citep{scipy}, pandas \citep{pandas}, and scikit-learn \citep{sklearn}.
+
+\subsection{Shot Boundary Annotation}
+
+To measure the visual pacing of videos, we annotate shot boundaries. We attempt downloaded all YouTube videos from our original set that were recommended to children and included Russian or Kyrgyz speech (as some videos have been removed or made private, we successfully downloaded of 805 Russian and 162 Kyrgyz videos of 1701 Russian, 364 Kyrgyz candidate URLs). To annotate the cuts between shots, we adapt the approach from the Distant Viewing Lab \citep{arnold2025}, which uses the TransNetV2 deep learning model to predict the probability that a frame is a shot boundary. We then calculate the length of each shot in each video to inform our measure of pacing.
 
 % ── 5. Results ────────────────────────────────────────────────────────────────
 \section{Results [Shary]}
@@ -346,6 +359,17 @@ The silhouette score on raw MobileNetV2 1280-dimensional embeddings was 0.020, a
         \label{fig:umapluminance}
     \end{subfigure}
     \caption{UMAP projection of MobileNetV2 thumbnail embeddings (532 videos). Diamonds indicate group median positions. Despite substantial overlap (silhouette = 0.078), the Kyrgyz centroid is displaced 2.73 UMAP units from the Russian centroid vs. 0.80 units from English. The luminance gradient (right) spatially corroborates the statistical finding: brighter thumbnails (yellow) cluster toward the Russian/English region.}
+\end{figure}
+
+\subsection{Video Shot Length Analysis}
+
+Russian-language videos exhibit substantially faster editing pace than Kyrgyz-language videos. The median shot duration for Russian content is 3.58 seconds, compared to 7.73 seconds for Kyrgyz content, meaning Russian videos cut between shots more than twice as frequently. A Mann-Whitney U test confirms this difference is highly significant ($p < 0.001$).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{results/figures/fig13_scene_length.png}
+    \caption{Distribution of average shot duration (in seconds) for Russian-language (n = 805) and Kyrgyz-language (n = 162) videos. Box plot shows median and interquartile range; violin plot shows the density of each distribution.}
+    \label{fig:placeholder}
 \end{figure}
 
 % ── 6. Discussion ─────────────────────────────────────────────────────────────
