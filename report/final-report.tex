@@ -174,7 +174,7 @@ For the visual analysis, we extracted thumbnail images for up to 200 videos per 
 
 \subsection{Rationale for Thumbnail Analysis}
 
-We use thumbnails rather than full video frames as our unit of analysis for three reasons. First, thumbnails are lightweight and fast to retrieve at scale, making them tractable for large-corpus analysis without the bandwidth and storage requirements of video download. Second, thumbnails are designed by content creators to be maximally visually representative of their content; they are, in effect, the visual face that a video presents to potential viewers, optimized for attention and click-through. Third, thumbnails are the primary visual signal that the YouTube recommendation interface presents to users browsing content, making them the most ecologically valid unit for studying the visual landscape of recommended content. All analysis notebooks were run in Google Colab with outputs persisted to Google Drive; code is available at the repository listed above.
+We use thumbnails rather than full video frames as our unit of analysis for three reasons. First, thumbnails are lightweight and fast to retrieve at scale, making them tractable for large-corpus analysis without the bandwidth and storage requirements of video download. Second, thumbnails are designed by content creators to be maximally visually representative of their content; they are, in effect, the visual face that a video presents to potential viewers, optimized for attention and click-through. Third, thumbnails are the primary visual signal that the YouTube recommendation interface presents to users browsing content, making them the most ecologically valid unit for studying the visual landscape of recommended content. All analysis notebooks were run in Google Colab with outputs persisted to Google Drive.
 
 \subsection{Color and Luminance Feature Extraction}
 
@@ -208,7 +208,7 @@ All pairwise comparisons between language groups used the Mann-Whitney U test (t
 
 \subsection{Shot Boundary Annotation}
 
-To measure the visual pacing of videos, we annotate shot boundaries. We attempt downloaded all YouTube videos from our original set that were recommended to children and included Russian or Kyrgyz speech (as some videos have been removed or made private, we successfully downloaded of 805 Russian and 162 Kyrgyz videos of 1701 Russian, 364 Kyrgyz candidate URLs). To annotate the cuts between shots, we adapt the approach from the Distant Viewing Lab \citep{arnold2025}, which uses the TransNetV2 deep learning model to predict the probability that a frame is a shot boundary. We then calculate the length of each shot in each video to inform our measure of pacing.
+To measure the visual pacing of videos, we annotated shot boundaries. We tried to download all YouTube videos from our original set that were recommended to children and included Russian or Kyrgyz speech (as some videos have been removed or made private, we successfully downloaded 805 Russian and 162 Kyrgyz videos of 1701 Russian, 364 Kyrgyz candidate URLs). To annotate the cuts between shots, we adapted the approach from the Distant Viewing Lab \citep{arnold2025}, which uses the TransNetV2 deep learning model to predict the probability that a frame is a shot boundary. We then calculated the length of each shot in each video to inform our measure of pacing.
 
 % ── 5. Results ────────────────────────────────────────────────────────────────
 \section{Results [Shary]}
